@@ -9,7 +9,7 @@ spec:
         elements:
           - env: prod
             namespace: api-prd-ns
-            valuesFile: values_prd.yaml
+            valuesFile: values_prod.yaml
   template:
     metadata:
       name: 'api-{{env}}'

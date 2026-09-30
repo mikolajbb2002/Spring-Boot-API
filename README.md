@@ -27,3 +27,12 @@ kubectl create namespace argocd
 kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
+5. Depend on what cluster contexts you are, apply application set
+
+```bash
+kubectl apply -f argocd/applicationset-prod.yaml
+```
+
+6. You can get to ArgoCD UI using port-forward via k9s 
+
+
