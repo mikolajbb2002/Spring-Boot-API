@@ -17,7 +17,7 @@ spec:
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           command: ["sh", "-c", "sleep infinity"]
           volumeMounts:
-          - name: spring-boot-api-config
+          - name: config
             mountPath: "/app/config"
             readOnly: true
     volumes:
