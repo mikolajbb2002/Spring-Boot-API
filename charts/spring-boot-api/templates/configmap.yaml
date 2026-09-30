@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-boot-api-config
+data:
+  config.json: |-
+{{ .Files.Get "test.json" | indent 4 }}
