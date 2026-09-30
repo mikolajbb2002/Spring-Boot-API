@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: "spring-boot-api"
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            namespace: api-de-ns
+            valuesFile: ./appchart/de/values_de.yaml
+          - env: prod
+            namespace: api-prd-ns
+            valuesFile: ./appchart/prd/values_prd.yaml
+  template:
+    metadata:
+      name: 'api-{{env}}'
+    spec:
+      project: default
+      sources:
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
