@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: "spring-boot-api"
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: de
+            namespace: api-de-ns
+            valuesFile: values_de.yaml
+  template:
+    metadata:
+      name: 'api-{{env}}'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/mikolajbb2002/Spring-Boot-API.git
+          path: charts/spring-boot-api
+          targetRevision: main
+          helm:
+            valueFiles:
+              - $values/env-values/{{valuesFile}}
+        - repoURL: https://github.com/mikolajbb2002/Spring-Boot-API.git
+          targetRevision: main
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true

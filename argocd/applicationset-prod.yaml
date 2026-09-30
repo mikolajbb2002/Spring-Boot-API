@@ -7,18 +7,24 @@ spec:
   generators:
     - list:
         elements:
-          - env: dev
-            namespace: api-de-ns
-            valuesFile: ./appchart/de/values_de.yaml
           - env: prod
             namespace: api-prd-ns
-            valuesFile: ./appchart/prd/values_prd.yaml
+            valuesFile: values_prd.yaml
   template:
     metadata:
       name: 'api-{{env}}'
     spec:
       project: default
       sources:
+        - repoURL: https://github.com/mikolajbb2002/Spring-Boot-API.git
+          path: charts/spring-boot-api
+          targetRevision: main
+          helm:
+            valueFiles:
+              - $values/env-values/{{valuesFile}}
+        - repoURL: https://github.com/mikolajbb2002/Spring-Boot-API.git
+          targetRevision: main
+          ref: values
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
