@@ -20,7 +20,7 @@ spec:
           - name: config
             mountPath: "/app/config"
             readOnly: true
-    volumes:
-    - name: config
-      configMap:
-        name: spring-boot-api-config
+      volumes:
+      - name: config
+        configMap:
+          name: spring-boot-api-config
