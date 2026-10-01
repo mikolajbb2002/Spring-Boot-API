@@ -28,3 +28,8 @@ kubectl apply -f argocd/applicationset-prod.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
 8. Then match IngressClassName to IngressClass created or create an alias 
+
+9. The chart creates `spring-boot-api-secret` with random 32-character values for
+`API_KEY` . The Deployment receives them as environment variables
+and files under `/etc/secret-volume`. 
+

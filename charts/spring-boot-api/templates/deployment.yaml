@@ -33,6 +33,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+          envFrom:
+            - secretRef:
+                name: spring-boot-api-secret
           ports:
           - containerPort: 8080
           - containerPort: 8081
@@ -41,7 +44,13 @@ spec:
           - name: config
             mountPath: "/app/config"
             readOnly: true
+          - name: secret-volume
+            readOnly: true
+            mountPath: "/etc/secret-volume"
       volumes:
       - name: config
         configMap:
           name: spring-boot-api-config
+      - name: secret-volume
+        secret:
+          secretName: spring-boot-api-secret

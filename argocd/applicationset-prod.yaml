@@ -32,3 +32,12 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+      # Keep the initially generated credentials across subsequent syncs.
+      ignoreDifferences:
+        - group: ""
+          kind: Secret
+          name: spring-boot-api-secret
+          namespace: '{{namespace}}'
+          jsonPointers:
+            - /data
