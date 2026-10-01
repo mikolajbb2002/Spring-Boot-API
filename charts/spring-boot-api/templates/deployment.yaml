@@ -19,9 +19,15 @@ spec:
             - sh
             - -c 
             - |
-              while true; do
-                printf 'HTTP/1.1 200 OK\r\nContent-Length: 2\r\n\r\nOK' | nc -l -p 8080
-              done 
+              for port in 8080 8081 8082; do
+                (
+                  while true; do
+                    printf 'HTTP/1.1 200 OK\r\nContent-Length: 2\r\nConnection: close\r\n\r\nOK' |
+                      nc -l -p "$port"
+                  done
+                ) &
+              done
+              wait
           env:
             - name: POD_IP
               valueFrom:
@@ -29,25 +35,8 @@ spec:
                   fieldPath: status.podIP
           ports:
           - containerPort: 8080
-          startupProbe:
-            httpGet:
-              path: /healthz
-              port: 8080
-            failureThreshold: 30
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            timeoutSeconds: 3
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 8080
-            periodSeconds: 5
+          - containerPort: 8081
+          - containerPort: 8082
           volumeMounts:
           - name: config
             mountPath: "/app/config"
