@@ -33,3 +33,14 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main
 `API_KEY` . The Deployment receives them as environment variables
 and files under `/etc/secret-volume`. 
 
+10. Kind shares on host only Kubernetes API- (there is no HTTP port mapping). Because of that you need to port-forward ingress nginx. 
+
+```bash 
+kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 18080:80
+```
+So flow looks like that: 
+
+Browser → port-forward → Nginx
+                              ├─ /api  → spring-boot-api:8080
+                              ├─ /logs → spring-boot-api:8081
+                              └─ /soap → spring-boot-api:8082
