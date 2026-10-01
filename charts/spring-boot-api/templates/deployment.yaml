@@ -15,7 +15,13 @@ spec:
       containers:
         - name: spring-boot-api
           image: "{{ .Values.image }}:{{ .Values.tag }}"
-          command: ["sh", "-c", "while true; do echo -e 'HTTP/1.1 200 OK\\r\\nContent-Length:2\\r\\n\\r\\nOK' | nc -l -p 8080 -q 1; done"]
+          command: 
+            - sh
+            - -c 
+            - |
+              while true; do
+                printf 'HTTP/1.1 200 OK\r\nContent-Length: 2\r\n\r\nOK' | nc -l -p 8080
+              done 
           env:
             - name: POD_IP
               valueFrom:
