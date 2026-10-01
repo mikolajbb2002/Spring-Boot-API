@@ -7,18 +7,6 @@
 kind create cluster --name prd-global-cluster-5
 ```
 
-2. Create chart template for spring-boot-api  
-
-```bash 
-helm create app_chart
-```
-
-3. Change the values in values file and then install helm chart 
-
-```bash
-helm install app_chart app_chart --namespace default
-```
-
 4. Deploy ArgoCD
 
 ```bash
@@ -35,4 +23,8 @@ kubectl apply -f argocd/applicationset-prod.yaml
 
 6. You can get to ArgoCD UI using port-forward via k9s 
 
+7. To use ingress you have to install controller previously 
 
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+8. Then match IngressClassName to IngressClass created or create an alias 
