@@ -15,7 +15,33 @@ spec:
       containers:
         - name: spring-boot-api
           image: "{{ .Values.image }}:{{ .Values.tag }}"
-          command: ["sh", "-c", "sleep infinity"]
+          command: ["sh", "-c", "while true; do echo -e 'HTTP/1.1 200 OK\\r\\nContent-Length:2\\r\\n\\r\\nOK' | nc -l -p 8080 -q 1; done"]
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+          - containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            periodSeconds: 5
           volumeMounts:
           - name: config
             mountPath: "/app/config"
